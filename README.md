@@ -1,6 +1,6 @@
 # Receptionist
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/receptionist`. To experiment with that code, run `bin/console` for an interactive prompt.
+Needing to show users admin-generated alerts and messages? This is for you.
 
 TODO: Delete this and the text above, and describe your gem
 
@@ -16,13 +16,41 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install receptionist
-
 ## Usage
 
-TODO: Write usage instructions here
+Generate the initializer file and the migrations needed with:
+
+    $ rails generate receptionist:install
+
+This will generate: migrations, an initializer file and build the engine routes on your routes.rb file.
+
+Set config.authorization_required to false if you don't need authorization to manage messages
+
+If you need authorization, set a boolean helper_method that will be used to check authorization
+Set config.check_authorization_method = :your_method
+
+Run the migrations with:
+
+    $ bundle exec rake db:migrate
+
+Start up the server and head to /receptionist/messages
+Create a message, head over to whichever view you want to place your message on (application.html.erb?) and add
+```ruby
+<%= receptionist_latest %>
+```
+
+Run the page and you should see something like
+<p class='info'>Your Message</p>
+
+You can change the template for the message by creating a template_for_receptionist method on your application controller like this:
+```ruby
+module ApplicationHelper
+
+  def template_for_receptionist(message, message_type)
+    content_tag(:p, message, class: message_type)
+  end
+end
+```
 
 ## Development
 
@@ -32,10 +60,9 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/receptionist. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/noitesdeinsonia/receptionist. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
